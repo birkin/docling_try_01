@@ -14,7 +14,16 @@ def validate_file_path(path_str: str) -> Path:
     return path
 
 
-def main():
+def main(source: str):
+    # Process the document
+    converter = DocumentConverter()
+    doc = converter.convert(source).document
+    print(doc.export_to_markdown())
+    # jsn: str = doc.export_to_dict()
+    # print(json.dumps(jsn, indent=2))
+
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert documents using Docling.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--url", type=str, help="URL of the document to convert")
@@ -29,14 +38,4 @@ def main():
         source = args.url
     else:  # args.pdf_path is guaranteed to exist due to mutual exclusivity and required=True
         source = str(validate_file_path(args.pdf_path))
-
-    # Process the document
-    converter = DocumentConverter()
-    doc = converter.convert(source).document
-    print(doc.export_to_markdown())
-    # jsn: str = doc.export_to_dict()
-    # print(json.dumps(jsn, indent=2))
-
-
-if __name__ == "__main__":
-    main()
+    main(source)
