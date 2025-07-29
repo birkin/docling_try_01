@@ -6,6 +6,7 @@ def main():
     converter = DocumentConverter()
     doc = converter.convert(source).document
     print(doc.export_to_markdown())
+    print(doc.export_to_json())
     # output: ## Docling Technical Report [...]"
 
 
