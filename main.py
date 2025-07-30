@@ -1,3 +1,12 @@
+"""
+Experiments with docling: <https://>
+
+Note: I believe this warning is related to PyTorch's DataLoader and MPS (Metal Performance Shaders) backend on macOS.
+    The platform-check suppresses a harmless macOS warning which indicates that while pin_memory=True
+    is set in the DataLoader, this feature isn't supported on MPS devices. The code will still
+    work correctly, just without the performance optimization that pinned memory would provide.
+"""
+
 import argparse
 import platform
 import warnings
