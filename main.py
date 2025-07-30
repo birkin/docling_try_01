@@ -12,7 +12,10 @@ import platform
 import warnings
 from pathlib import Path
 
-from docling.document_converter import ConversionResult, DocumentConverter
+from docling.document_converter import DocumentConverter
+from docling_core.types.doc import DoclingDocument  # just for the type-hint
+
+# from docling.datamodel.docling_document import DoclingDocument
 
 if platform.system() == "Darwin":  # Darwin is the system name for macOS
     warnings.filterwarnings(
@@ -34,14 +37,27 @@ def validate_file_path(path_str: str) -> Path:
 
 
 def main(source: str) -> None:
+    """
+    Flow:
+    - Instantiates a DocumentConverter
+    - Converts the document to a DoclingDocument
+    - Exports the document to markdown
+    - Prints the markdown
+
+    Interesting note: when the line `doc: DoclingDocument = converter.convert(source).document` is run,
+    the `source` has not yet been identified as a url or filepath.
+
+    I have a memory of Mark Pilgrim, in his online-book "Dive into Python", doing something similar.
+    """
     ## process the document
-    converter: DocumentConverter = DocumentConverter()
-    doc: ConversionResult = converter.convert(source).document
+    converter = DocumentConverter()
+    doc: DoclingDocument = converter.convert(source).document
     ## create and output the markdown
     markdown: str = doc.export_to_markdown()
     print(markdown)
     # jsn: str = doc.export_to_dict()
-    # print(json.dumps(jsn, indent=2))
+    # formatted_json: str = json.dumps(jsn, indent=2)
+    # print(formatted_json)
 
 
 if __name__ == "__main__":
