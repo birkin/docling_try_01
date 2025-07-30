@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # Get the source (URL or validated file path)
+    ## get the source (URL or validated file path)
     if args.url:
         source = args.url
     else:  # args.pdf_path is guaranteed to exist due to mutual exclusivity and required=True
