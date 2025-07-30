@@ -1,5 +1,5 @@
 """
-Experiments with docling: <https://>
+Experiments with docling: <https://github.com/docling-project/docling>
 
 Note: I believe this warning is related to PyTorch's DataLoader and MPS (Metal Performance Shaders) backend on macOS.
     The platform-check suppresses a harmless macOS warning which indicates that while pin_memory=True
@@ -12,7 +12,7 @@ import platform
 import warnings
 from pathlib import Path
 
-from docling.document_converter import DocumentConverter
+from docling.document_converter import ConversionResult, DocumentConverter
 
 if platform.system() == "Darwin":  # Darwin is the system name for macOS
     warnings.filterwarnings(
@@ -22,7 +22,9 @@ if platform.system() == "Darwin":  # Darwin is the system name for macOS
 
 
 def validate_file_path(path_str: str) -> Path:
-    """Validate that the file path exists and return Path object."""
+    """
+    Validates that the file path exists and return Path object.
+    """
     path = Path(path_str)
     if not path.exists():
         raise FileNotFoundError(f"File not found: {path}")
@@ -31,25 +33,26 @@ def validate_file_path(path_str: str) -> Path:
     return path
 
 
-def main(source: str):
-    # Process the document
-    converter = DocumentConverter()
-    doc = converter.convert(source).document
-    print(doc.export_to_markdown())
+def main(source: str) -> None:
+    ## process the document
+    converter: DocumentConverter = DocumentConverter()
+    doc: ConversionResult = converter.convert(source).document
+    ## create and output the markdown
+    markdown: str = doc.export_to_markdown()
+    print(markdown)
     # jsn: str = doc.export_to_dict()
     # print(json.dumps(jsn, indent=2))
 
 
 if __name__ == "__main__":
+    ## handle args
     parser = argparse.ArgumentParser(description="Convert documents using Docling.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--url", type=str, help="URL of the document to convert")
     group.add_argument(
         "--pdf_path", type=str, help="Local path to the PDF file to convert"
     )
-
     args = parser.parse_args()
-
     ## get the source (URL or validated file path)
     if args.url:
         source = args.url
