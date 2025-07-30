@@ -1,7 +1,13 @@
 import argparse
+import warnings
 from pathlib import Path
 
 from docling.document_converter import DocumentConverter
+
+warnings.filterwarnings(
+    "ignore",
+    message="'pin_memory' argument is set as true but not supported on MPS now",
+)
 
 
 def validate_file_path(path_str: str) -> Path:
